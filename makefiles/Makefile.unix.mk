@@ -3,6 +3,8 @@
 #  ----- about it. -----
 
 # Unix specific definitions
+LINUX_COMPILER = $(NDK)/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android28-clang++ -static-libstdc++
+
 LIB_PREFIX = lib
 DEP_BIN_DIR = $(OR_ROOT)dependencies/install/bin
 # C++ relevant directory
@@ -117,8 +119,8 @@ DEBUG = -O4 -DNDEBUG
 JNIDEBUG = -O1 -DNDEBUG
 
 ifeq ($(PLATFORM),LINUX)
-  CCC = g++ -fPIC -std=c++11 -fwrapv
-  DYNAMIC_LD = g++ -shared
+  CCC = ${LINUX_COMPILER} -fPIC -std=c++11 -fwrapv
+  DYNAMIC_LD = ${LINUX_COMPILER}  -shared
   DYNAMIC_LDFLAGS = -Wl,-rpath,\"\\\$$\$$ORIGIN\"
 
   # This is needed to find libz.a
@@ -158,7 +160,7 @@ ifeq ($(PLATFORM),LINUX)
  -lm -lpthread -ldl
     endif
   endif
-  SYS_LNK = -lrt -lpthread
+  SYS_LNK = #-lrt -lpthread
   JAVA_INC = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
   JAVAC_BIN = $(shell $(WHICH) $(JAVA_HOME)/bin/javac)
   JAVA_BIN = $(shell $(WHICH) $(JAVA_HOME)/bin/java)

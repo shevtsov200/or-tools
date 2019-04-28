@@ -81,7 +81,7 @@ class ScopedFloatingPointEnv {
 #elif defined(ARCH_K8)
     CHECK_EQ(0, fegetenv(&fenv_));
     excepts &= FE_ALL_EXCEPT;
-#ifdef __APPLE__
+#ifdef __APPLE_ || __ARM___
     fenv_.__control &= ~excepts;
 #else  // Linux
     fenv_.__control_word &= ~excepts;

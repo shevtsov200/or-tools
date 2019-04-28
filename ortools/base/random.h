@@ -80,8 +80,8 @@ class ACMRandom {
   static constexpr result_type min() { return 0; }
   static constexpr result_type max() { return kuint32max; }
 #else
-  static result_type min() { return 0; }
-  static result_type max() { return kuint32max; }
+  static constexpr result_type min() { return 0; }
+  static constexpr result_type max() { return kuint32max; }
 #endif
   virtual result_type operator()() { return Next(); }
   int64 operator()(int64 val_max) { return Next64() % val_max; }

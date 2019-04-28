@@ -119,7 +119,7 @@ DEBUG = -O4 -DNDEBUG
 JNIDEBUG = -O1 -DNDEBUG
 
 ifeq ($(PLATFORM),LINUX)
-  CCC = ${LINUX_COMPILER} -fPIC -std=c++11 -fwrapv
+  CCC = ${LINUX_COMPILER} -fPIC -std=c++17 -fwrapv
   DYNAMIC_LD = ${LINUX_COMPILER}  -shared
   DYNAMIC_LDFLAGS = -Wl,-rpath,\"\\\$$\$$ORIGIN\"
 

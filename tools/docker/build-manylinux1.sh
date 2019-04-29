@@ -184,12 +184,31 @@ do
     ###
 
     # Hack wheel file to rename it manylinux1 since manylinux2010 is still not
-    # supported by pip
+    # supported by default pip on most distro.
+    # see: https://github.com/pypa/pip/blob/c9df690f3b5bb285a855953272e6fe24f69aa08a/src/pip/_internal/wheel.py#L71-L84
     FILE=(${EXPORT_ROOT}/*-${PYTAG}-*.whl)
     unzip "$FILE" -d /tmp
-    sed -i 's/manylinux2010/manylinux1/' /tmp/ortools-*.dist-info/WHEEL
     rm -f $FILE
-
+    WHEEL_FILE=(/tmp/ortools-*.dist-info/WHEEL)
+    RECORD_FILE=(/tmp/ortools-*.dist-info/RECORD)
+    # Save old hash and size, in order to look them up in RECORD
+    # See https://github.com/pypa/pip/blob/8d0b73fc5b289c0347d7261e5efeeb40a8470382/src/pip/_internal/wheel.py#L71
+    WHEEL_HASH_CMD="/opt/_internal/cpython-3.7.3/bin/python3 -c \
+\"import hashlib;\
+import base64;\
+print(\
+base64.urlsafe_b64encode(\
+hashlib.sha256(open('${WHEEL_FILE}', 'rb').read())\
+.digest())\
+.decode('latin1')\
+.rstrip(b'='))\""
+    OLD_HASH=$(eval ${WHEEL_HASH_CMD})
+    OLD_SIZE=$(wc -c < ${WHEEL_FILE})
+    sed -i 's/manylinux2010/manylinux1/' ${WHEEL_FILE}
+    NEW_HASH=$(eval ${WHEEL_HASH_CMD})
+    NEW_SIZE=$(wc -c < ${WHEEL_FILE})
+    # Update RECORD file with the new hash and size
+    sed -i "s/${OLD_HASH},${OLD_SIZE}/${NEW_HASH},${NEW_SIZE}/" ${RECORD_FILE}
     WHEEL_FILE=${FILE//manylinux2010/manylinux1}
     (cd /tmp; zip -r ${WHEEL_FILE} ortools ortools-*; rm -r ortools*)
     echo "Wheel file: ${WHEEL_FILE}"

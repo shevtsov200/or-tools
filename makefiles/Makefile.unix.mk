@@ -3,7 +3,7 @@
 #  ----- about it. -----
 
 # Unix specific definitions
-LINUX_COMPILER = $(NDK)/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android28-clang++ -static-libstdc++
+LINUX_COMPILER = /home/daniil/android-ndk-r19c/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android28-clang++ -static-libstdc++ 
 
 LIB_PREFIX = lib
 DEP_BIN_DIR = $(OR_ROOT)dependencies/install/bin
@@ -218,7 +218,7 @@ ifeq ($(PLATFORM),MACOSX)
  -lm -lpthread -framework CoreFoundation -framework IOKit
   endif
   SYS_LNK =
-  SET_COMPILER = CXX="$(CCC)"
+  SET_COMPILER = CXX="$(LINUX_COMPILER)"
   JAVA_INC = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/darwin
   JAVAC_BIN = $(shell $(WHICH) $(JAVA_HOME)/bin/javac)
   JAVA_BIN = $(shell $(WHICH) $(JAVA_HOME)/bin/java)

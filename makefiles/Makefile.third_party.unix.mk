@@ -30,6 +30,8 @@ OSI_TAG = 0.107.9
 COINUTILS_TAG = 2.10.14
 PATCHELF_TAG = 0.9
 
+GFLAGS_SO_VERSION = ""
+
 # Main target.
 .PHONY: third_party # Build OR-Tools Prerequisite
 third_party: build_third_party
